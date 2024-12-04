@@ -1,15 +1,10 @@
 <template>
-      <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      </head>
-  
-      <body>
-        <Header />
-          <main>
-            <slot></slot> <!-- This will render the child content -->
-          </main>
-      </body>
+    <div>
+      <Header /> <!-- Single inclusion of the Header -->
+      <main>
+        <slot></slot> <!-- Render route-specific content -->
+      </main>
+    </div>
   </template>
   
   <script>
@@ -18,7 +13,7 @@
   export default {
     name: 'Layout',
     components: {
-      Header
+      Header,
     },
   };
   </script>

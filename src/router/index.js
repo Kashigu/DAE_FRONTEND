@@ -1,16 +1,14 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import Home from '@/views/Home.vue';
-import Layout from '@/layout.vue';
+import Layout from '@/layout.vue'; // Your main layout
 
 const routes = [
   {
     path: '/',
-    component: Layout, // Use RootLayout as the parent layout
-    children: [
-      { path: '', component: Home },
-      
-    ],
-  },
+    name: 'Home',
+    component: Home,
+    meta: { layout: Layout }, // Default layout
+  }
 ];
 
 const router = createRouter({

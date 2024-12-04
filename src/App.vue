@@ -1,12 +1,12 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router';
+import { RouterView } from 'vue-router';
 </script>
 
 <template>
-  <div>
-   
- <!-- The active route's component will be displayed here -->
-    <RouterView />
-  </div>
+  <RouterView v-slot="{ Component, route }">
+    <!-- Dynamically use the layout specified in the route -->
+    <component :is="route.meta.layout || 'div'">
+      <component :is="Component" /> <!-- Render de / component that is Home.vue-->
+    </component>
+  </RouterView>
 </template>
-
