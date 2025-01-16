@@ -11,6 +11,10 @@
         <nav class="text-white font-bold space-x-12 justify-center flex">
           <router-link to="/" class="hover:text-red-500">Homepage</router-link>
         </nav>
+        <!-- User Section -->
+        <div class="text-white font-bold justify-end flex">
+          <router-link to="/login" class="hover:text-red-500">Login</router-link>
+        </div>
       </header>
     </div>
   </template>
