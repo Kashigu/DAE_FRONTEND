@@ -38,6 +38,13 @@ const routes = [
     component: () => import('@/views/produtos.vue'),
     meta: { layout: Layout },
   },
+
+  {
+    path: '/sensores/:id?',
+    name: 'Sensores',
+    component: () => import('@/views/Sensores.vue'),
+    meta: { layout: Layout },
+  }
 ];
 
 const router = createRouter({
