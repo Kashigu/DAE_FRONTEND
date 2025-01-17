@@ -34,7 +34,7 @@
   
   <script>
   import api from "@/api/api.js";
-  
+  import {useAuthStore} from "@/stores/auth.js";
   export default {
     data() {
       return {
@@ -43,7 +43,18 @@
     },
     async created() {
       try {
-        const response = await api.get("/encomenda/all");
+        const authStore = useAuthStore();
+        if(!authStore.isLoggedIn){
+          this.$router.push("/login");
+          return;
+        }
+        let endPoint;
+        if(authStore.user.role === 'Cliente'){
+          endPoint = "/encomenda/cliente/"+authStore.user.username;
+        }else{
+          endPoint = "/encomenda/all";
+        }
+        const response = await api.get(endPoint);
         this.encomendas = response.data;
       } catch (error) {
         console.error("Error fetching encomendas:", error);
