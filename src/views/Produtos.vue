@@ -36,6 +36,7 @@
   
   <script>
   import api from "@/api/api.js";
+  import { useAuthStore } from "@/stores/auth.js";
   
   export default {
     data() {
@@ -46,6 +47,15 @@
     },
     async created() {
       try {
+        const authStore = useAuthStore();
+        console.log(authStore.user);
+        authStore.getToken.then((token) => {
+          if (!token) {
+            this.$router.push("/login");
+            return;
+          }
+        });
+
         // Get the 'codigo' from the route params
         this.encomendaCodigo = this.$route.params.id;
   

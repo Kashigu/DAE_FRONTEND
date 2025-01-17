@@ -66,7 +66,7 @@ export default {
       // Get the 'codigo' from the route params
       this.encomendaCodigo = this.$route.params.id;
       
-      const response = await api.get(`/volume/${this.encomendaCodigo}`);
+      const response = await api.get(`/encomenda/${this.encomendaCodigo}`);
       console.log("API Response:", response.data);
 
       // Ensure the data is an array

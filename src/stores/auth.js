@@ -24,6 +24,25 @@ export const useAuthStore = defineStore('auth', () => {
         return typeof username === 'string' && typeof password === 'string';
     };
 
+    //save the token in storage
+    const saveToken = () =>{
+        localStorage.setItem('token', token.value);
+    }
+
+    //get the token from storage
+    const getToken = async () => {
+        token.value = localStorage.getItem('token');
+        if (token.value) {
+            api.defaults.headers.common = {
+                Authorization: `Bearer ${token.value}`,
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+            }
+            isLoggedIn.value = true;
+            await getUser();
+        }
+    }
+
     const login = async (credentials) => {
         if (!checkValue(credentials)) {
             throw new Error('Invalid credentials');
@@ -36,6 +55,7 @@ export const useAuthStore = defineStore('auth', () => {
             throw new Error('Invalid credentials');
         }
         token.value = tokenValue;
+        saveToken();
         api.defaults.headers.common = {
             Authorization: `Bearer ${token.value}`,
             'Content-Type': 'application/json',
@@ -66,5 +86,6 @@ export const useAuthStore = defineStore('auth', () => {
         isLoggedIn,
         login,
         logout,
+        getToken,
     };
 });
