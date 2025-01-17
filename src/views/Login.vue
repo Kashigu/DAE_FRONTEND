@@ -50,7 +50,9 @@
 </template>
 
 <script>
-import { useAuthStore } from '../stores/auth'; // Import the store
+import { useAuthStore } from '../stores/auth';
+import api from "@/api/api.js";
+import router from "@/router/index.js"; // Import the store
 
 export default {
   data() {
@@ -67,6 +69,7 @@ export default {
         await authStore.login({username: this.username, password: this.password});
         this.errorMessage = '';
         // Redirect or handle successful login
+        await router.push('/encomendas');
       } catch (error) {
         console.error('Error during login:', error);
         this.errorMessage = 'Invalid username or password.';
