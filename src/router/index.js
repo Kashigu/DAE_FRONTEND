@@ -35,7 +35,7 @@ const routes = [
   {
     path: '/produtos/:id?',
     name: 'Produtos',
-    component: () => import('@/views/produtos.vue'),
+    component: () => import('@/views/Produtos.vue'),
     meta: { layout: Layout },
   },
 

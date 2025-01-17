@@ -1,29 +1,27 @@
-# FrontEnd
+# SW
 
-This template should help get you started developing with Vue 3 in Vite.
+SigmaWarehouse is a Single Page Application that allows users to view their orders. 
+The application supports multiple user types, including standard users and administrators, each with different permissions.
 
-## Recommended IDE Setup
+## Stacks Used
+- Next.js 
+- Vue
+- Vite
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+## Libraries Used
+- TailwindCSS
 
-## Customize configuration
-
-See [Vite Configuration Reference](https://vite.dev/config/).
-
-## Project Setup
-
-```sh
-npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
-```
-
-### Compile and Minify for Production
-
-```sh
-npm run build
-```
+## Screenshots
+![Home Page](./public/images/homepage.png)
+<br/>
+![Register](./public/images/register.png)
+<br/>
+![Animes](./public/images/Animess.png)
+<br/>
+![AnimePage](./public/images/AnimesPage.png)
+<br/>
+![Episodes](./public/images/Episodes.png)
+<br/>
+![Profile](./public/images/Profile.png)
+<br/>
+![StatusList](./public/images/StatusList.png)
