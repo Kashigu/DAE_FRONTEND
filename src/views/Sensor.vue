@@ -57,7 +57,7 @@
         const response = await api.get(endPoint);
         this.sensores = response.data;
       } catch (error) {
-        console.error("Error fetching sensores:", error);
+        console.error("Error fetching sensor:", error);
       }
     },
   };
