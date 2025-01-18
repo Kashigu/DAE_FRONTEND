@@ -8,20 +8,21 @@
       >
         Voltar
       </button>
-      <h1 class="text-4xl font-bold text-center flex-grow">Registrar Novo Funcionário</h1>
+      <h1 class="text-4xl font-bold text-center flex-grow">Editar Funcionário</h1>
     </div>
 
-    <!-- Formulário de Registro -->
+    <!-- Formulário de Edição -->
     <div class="bg-white rounded-lg shadow-md p-6">
-      <h2 class="text-2xl font-bold text-black mb-4">Crie um novo funcionário</h2>
+      <h2 class="text-2xl font-bold text-black mb-4">Edite os dados do funcionário</h2>
 
-      <form @submit.prevent="registerFuncionario">
+      <form @submit.prevent="updateFuncionario">
         <div class="mb-4">
           <label class="text-lg font-medium">Nome de Utilizador (ID do Funcionário):</label>
           <input
               v-model="funcionario.username"
               type="text"
               required
+              disabled
               class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
@@ -45,33 +46,12 @@
               class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
-
-        <div class="mb-4">
-          <label class="text-lg font-medium">Senha:</label>
-          <input
-              v-model="funcionario.password"
-              type="password"
-              required
-              class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
-
-        <div class="mb-4">
-          <label class="text-lg font-medium">Confirmar Senha:</label>
-          <input
-              v-model="funcionario.confirmPassword"
-              type="password"
-              required
-              class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
-
         <div class="mt-6 flex justify-end">
           <button
               type="submit"
               class="px-6 py-2 bg-blue-500 text-white font-semibold rounded hover:bg-blue-600"
           >
-            Registrar
+            Atualizar
           </button>
         </div>
       </form>
@@ -81,48 +61,55 @@
 
 <script>
 import api from "@/api/api.js";
-import { useAuthStore } from "@/stores/auth.js"; // Supondo que você esteja usando Pinia ou Vuex
+import { useRouter } from "vue-router";
+import { useAuthStore } from "@/stores/auth.js";
 
 export default {
   data() {
     return {
       funcionario: {
-        username: "",  // O id do funcionário será o username
+        username: "",
         nome: "",
         email: "",
-        password: "",
-        confirmPassword: "",
       }, // Dados do funcionário
     };
   },
+  async created() {
+    const username = this.$route.params.id; // Pega o username do parâmetro da rota
+    await this.fetchFuncionario(username); // Carrega os dados do funcionário
+  },
   methods: {
-    // Método para registrar o funcionário
-    async registerFuncionario() {
-      // Verificar se as senhas são iguais
-      if (this.funcionario.password !== this.funcionario.confirmPassword) {
-        alert("As senhas não coincidem.");
-        return;
-      }
-
+    // Método para buscar os dados do funcionário pelo username
+    async fetchFuncionario(username) {
       try {
-        delete this.funcionario.confirmPassword; // Remove o campo de confirmação de senha
-        const response = await api.post("/funcionario", this.funcionario);
-
+        const response = await api.get(`/funcionario/${username}`);
         if (response.status === 200) {
-          alert("Funcionário registrado com sucesso!");
-          // Verificar se o usuário está logado e é um gestor
-          const authStore = useAuthStore();
-          if (authStore.isLoggedIn && authStore.user.role === 'Gestor') {
-            this.$router.back(); // Volta para a página anterior se for gestor
-          } else {
-            this.$router.push("/login"); // Redireciona para o login caso contrário
-          }
+          this.funcionario = response.data;
         } else {
-          alert("Erro ao registrar o funcionário.");
+          alert("Funcionário não encontrado.");
+          this.$router.push("/funcionarios"); // Redireciona para a lista de funcionários caso não encontre
         }
       } catch (error) {
-        console.error("Erro ao registrar o funcionário:", error);
-        alert("Erro ao tentar registrar o funcionário.");
+        console.error("Erro ao carregar os dados do funcionário:", error);
+        alert("Erro ao tentar carregar os dados do funcionário.");
+      }
+    },
+
+    // Método para atualizar os dados do funcionário
+    async updateFuncionario() {
+      try {
+        delete this.funcionario.confirmPassword; // Remove o campo de confirmação de senha
+        const response = await api.patch(`/funcionario/${this.funcionario.username}`, this.funcionario);
+
+        if (response.status === 200) {
+          alert("Funcionário atualizado com sucesso!");
+          this.$router.push("/funcionarios"); // Redireciona para a lista de funcionários após a atualização
+        } else {
+          alert("Erro ao atualizar o funcionário.");
+        }
+      } catch (error) {
+        console.error("Erro ao atualizar o funcionário:", error);
+        alert("Erro ao tentar atualizar o funcionário.");
       }
     },
   },

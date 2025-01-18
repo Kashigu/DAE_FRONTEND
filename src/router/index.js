@@ -138,15 +138,13 @@ const routes = [
     component: () => import('@/views/CriarFuncionario.vue'),
     meta: { layout: Layout },
   },
-
-  /*
   {
     path: '/funcionarios/editar/:id',
     name: 'EditarFuncionario',
     component: () => import('@/views/EditarFuncionario.vue'),
     meta: { layout: Layout },
   }
-  */
+
 
 
 
