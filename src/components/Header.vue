@@ -16,7 +16,7 @@
 
       <!-- Gestor Section -->
       <div v-if="authStore.isUserLoggedIn && authStore.user?.role === 'Gestor'" class="text-white font-bold flex justify-end px-6">
-        <router-link to="/produtos" class="hover:text-gray-200 mx-2">Produtos</router-link>
+        <router-link to="/produtos/all" class="hover:text-gray-200 mx-2">Produtos</router-link>
         <router-link to="/encomendas" class="hover:text-gray-200 mx-2">Encomendas</router-link>
         <router-link to="/perfil" class="hover:text-gray-200 mx-2">Perfil</router-link>
         <router-link to="/login" class="hover:text-gray-200 mx-2">Logout</router-link>

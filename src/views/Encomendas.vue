@@ -13,10 +13,20 @@
       </h1>
     </div>
 
+    <!-- Barra de pesquisa -->
+    <div class="mb-6">
+      <input
+          v-model="searchQuery"
+          type="text"
+          placeholder="Pesquisar encomendas..."
+          class="px-4 py-2 w-full md:w-1/3 border rounded"
+      />
+    </div>
+
     <!-- Lista de Encomendas -->
     <div class="grid grid-cols-1 gap-8">
       <div
-          v-for="(encomenda, index) in encomendas"
+          v-for="(encomenda, index) in filteredEncomendas"
           :key="index"
           class="bg-white rounded-lg shadow-md p-6"
       >
@@ -44,15 +54,16 @@
     </div>
   </div>
 </template>
-
 <script>
 import api from "@/api/api.js";
 import { useAuthStore } from "@/stores/auth.js";
+import { ref, computed } from "vue";
 
 export default {
   data() {
     return {
       encomendas: [],
+      searchQuery: "", // Armazenar a consulta de pesquisa
     };
   },
   setup() {
@@ -84,6 +95,20 @@ export default {
     } catch (error) {
       console.error("Error fetching encomendas:", error);
     }
+  },
+
+  computed: {
+    filteredEncomendas() {
+      // Filtrar encomendas com base na pesquisa
+      if (!this.searchQuery) {
+        return this.encomendas;
+      }
+      return this.encomendas.filter(encomenda =>
+          encomenda.estado.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+          encomenda.morada.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+          encomenda.clienteUsername.toLowerCase().includes(this.searchQuery.toLowerCase())
+      );
+    },
   },
 };
 </script>

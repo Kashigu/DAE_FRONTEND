@@ -95,6 +95,17 @@ const routes = [
     name: 'EditarVolume',
     component: () => import('@/views/EditarVolume.vue'),
     meta: { layout: Layout },
+  },
+  {
+    path: '/produtos/all',
+    name: 'ProdutosAll',
+    component: () => import('@/views/ProdutosAll.vue'),
+    meta: { layout: Layout },
+  },
+  {
+    path: '/produtos/criar',
+    name: 'CriarProduto',
+    component: () => import('@/views/CriarProduto.vue'),
   }
 
 
