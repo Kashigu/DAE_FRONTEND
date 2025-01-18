@@ -143,6 +143,24 @@ const routes = [
     name: 'EditarFuncionario',
     component: () => import('@/views/EditarFuncionario.vue'),
     meta: { layout: Layout },
+  },
+  {
+    path:'/sensoresAuth',
+    name:'SensoresAuth',
+    component: () => import('@/views/SensoresAuth.vue'),
+    meta: { layout: Layout },
+  },
+  {
+    path:'/sensoresAuth/criar',
+    name:'CriarSensorAuth',
+    component: () => import('@/views/CriarSensorAuth.vue'),
+    meta: { layout: Layout },
+  },
+  {
+    path:'/sensoresAuth/editar/:id',
+    name:'EditarSensorAuth',
+    component: () => import('@/views/EditarSensorAuth.vue'),
+    meta: { layout: Layout },
   }
 
 
