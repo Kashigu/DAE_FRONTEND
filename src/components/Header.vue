@@ -8,16 +8,32 @@
         </router-link>
       </div>
 
+      <!-- Anon -->
+      <div v-if="!authStore.isLoggedIn" class="text-white font-bold flex justify-end px-6">
+        <router-link to="/login" class="text-white justify-end hover:text-gray-200">Login</router-link>
+        <router-link to="/register" class="hover:text-gray-200 mx-2">Registar</router-link>
+      </div>
+
+      <!-- Gestor Section -->
+      <div v-if="authStore.isUserLoggedIn && authStore.user?.role === 'Gestor'" class="text-white font-bold flex justify-end px-6">
+        <router-link to="/produtos" class="hover:text-gray-200 mx-2">Produtos</router-link>
+        <router-link to="/encomendas" class="hover:text-gray-200 mx-2">Encomendas</router-link>
+        <router-link to="/perfil" class="hover:text-gray-200 mx-2">Perfil</router-link>
+        <router-link to="/login" class="hover:text-gray-200 mx-2">Logout</router-link>
+      </div>
+
+      <!-- Sensor Section -->
+      <div v-if="authStore.isUserLoggedIn && authStore.user?.role === 'SensorAuth'" class="text-white font-bold flex justify-end px-6">
+        <router-link to="/sensor" class="hover:text-gray-200 mx-2">Sensores</router-link>
+        <router-link to="/login" class="hover:text-gray-200 mx-2">Logout</router-link>
+      </div>
+
       <!-- User Section -->
-      <div v-if="authStore.isUserLoggedIn" class="text-white font-bold flex justify-end  px-6 ">
+      <div v-if="authStore.isUserLoggedIn && authStore.user?.role === 'Cliente'" class="text-white font-bold flex justify-end px-6">
         <router-link to="/encomendar" class="hover:text-gray-200 mx-2">Encomendar</router-link>
         <router-link to="/encomendas" class="hover:text-gray-200 mx-2">Minhas Encomendas</router-link>
         <router-link to="/perfil" class="hover:text-gray-200 mx-2">Perfil</router-link>
         <router-link to="/login" class="hover:text-gray-200 mx-2">Logout</router-link>
-      </div>
-      <div v-else class="text-white font-bold flex justify-end  px-6 ">
-        <router-link to="/login" class="text-white justify-end hover:text-gray-200">Login</router-link>
-        <router-link to="/register" class="hover:text-gray-200 mx-2">Registar</router-link>
       </div>
     </header>
   </div>
@@ -25,15 +41,18 @@
 
 <script>
 import { useAuthStore } from "@/stores/auth";
+
 export default {
   name: "Header",
   setup() {
     const authStore = useAuthStore(); // Access the auth store
-    authStore.getToken()
+
+    // Certifique-se de que o token é obtido corretamente
+    authStore.getToken();
+
     return {
       authStore,
     };
   },
 };
 </script>
-  

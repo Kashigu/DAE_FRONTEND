@@ -84,6 +84,19 @@ const routes = [
     component: () => import('@/views/Encomendar.vue'),
     meta: { layout: Layout },
   },
+  {
+    path: '/editarEncomenda/:codigo',
+    name: 'EditarEncomenda',
+    component: () => import('@/views/EditarEncomendas.vue'),
+    meta: { layout: Layout },
+  },
+  {
+    path: '/editarVolume/:id',
+    name: 'EditarVolume',
+    component: () => import('@/views/EditarVolume.vue'),
+    meta: { layout: Layout },
+  }
+
 
 ];
 
