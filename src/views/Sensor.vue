@@ -12,16 +12,28 @@
       <div class="grid grid-cols-1 gap-8">
         <div
           v-for="(sensor, index) in sensores"
-          :key="index"
+          :key="sensor.id" 
           class="bg-white rounded-lg shadow-md p-6"
         >
           <!-- Encomenda Information Clicas no sensor e vês o historico--> 
-          <a :href="'/AddMedicoes/' + sensor.id">
-          <h2 class="text-2xl font-bold text-black mb-4">Código: {{ sensor.id }}</h2>
-          <p class="text-lg font-medium">Estado: {{ sensor.ativo ? 'Ativo' : 'Inativo' }}</p>
-          <p class="text-lg font-medium">Sensor: {{ sensor.tipo }}</p>
-          <p class="text-lg font-medium">VolumeId: {{ sensor.volumeId }}</p>
-           </a>
+
+          <router-link
+            v-if="authStore.isUserLoggedIn && authStore.user?.role === 'SensorAuth'"
+            :to="'/AddMedicoes/' + sensor.id"
+            class="block" 
+          >
+            <h2 class="text-2xl font-bold text-black mb-4">Código: {{ sensor.id }}</h2>
+            <p class="text-lg font-medium">Estado: {{ sensor.ativo ? 'Ativo' : 'Inativo' }}</p>
+            <p class="text-lg font-medium">Sensor: {{ sensor.tipo }}</p>
+            <p class="text-lg font-medium">VolumeId: {{ sensor.volumeId }}</p>
+          </router-link>
+
+          <div v-else>
+            <h2 class="text-2xl font-bold text-black mb-4">Código: {{ sensor.id }}</h2>
+            <p class="text-lg font-medium">Estado: {{ sensor.ativo ? 'Ativo' : 'Inativo' }}</p>
+            <p class="text-lg font-medium">Sensor: {{ sensor.tipo }}</p>
+            <p class="text-lg font-medium">VolumeId: {{ sensor.volumeId }}</p>
+          </div>
         </div>
       </div>
     </div>
@@ -31,6 +43,14 @@
   import api from "@/api/api.js";
   import {useAuthStore} from "@/stores/auth.js";
   export default {
+    setup() {
+      const authStore = useAuthStore();
+      
+
+      return {
+        authStore,
+      };
+    },
     data() {
       return {
         sensores: [],
@@ -49,7 +69,7 @@
         
         console.log(authStore.user.role);
         let endPoint;
-        if(authStore.user.role === 'SensorAuth'){
+        if(authStore.user.role !== 'Client'){
           endPoint = "/sensor/all";
         }else{
           this.$router.push("/login");
