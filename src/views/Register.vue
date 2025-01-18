@@ -75,7 +75,6 @@
 
 <script>
 import api from "@/api/api.js";
-import { useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/auth.js";
 
 export default {

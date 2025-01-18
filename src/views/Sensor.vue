@@ -8,14 +8,14 @@
       </h1>
     </div>
   
-      <!-- Lista de Encomendas -->
-      <div class="grid grid-cols-1 gap-8">
+      <!-- Lista de Sensores -->
+      <div v-if="authStore.isUserLoggedIn && authStore.user?.role !== 'SensorAuth'" class="grid grid-cols-1 gap-8">
         <div
-          v-for="(sensor, index) in sensores"
+          v-for="(sensor) in sensores"
           :key="sensor.id"
           class="bg-white rounded-lg shadow-md p-6"
         >
-          <!-- Encomenda Information -->
+          <!-- Sensor Information -->
           <div>
             <h2 class="text-2xl font-bold text-black mb-4">Código: {{ sensor.id }}</h2>
             <p class="text-lg font-medium">
@@ -33,16 +33,43 @@
           </div>
         </div>
       </div>
+
+      <div v-if="authStore.isUserLoggedIn && authStore.user?.role === 'SensorAuth'" class="grid grid-cols-1 gap-8">
+        <div
+          v-for="(sensor) in sensores"
+          :key="sensor.id"
+          class="bg-white rounded-lg shadow-md p-6"
+        >
+        <!-- Sensor Information -->
+          <div>
+            <a :href="'/addMedicoes/' + sensor.id">
+              <h2 class="text-2xl font-bold text-black mb-4">Código: {{ sensor.id }}</h2>
+              <p class="text-lg font-medium">
+                Estado:  {{ sensor.ativo ? 'Ativo' : 'Inativo' }}
+              </p>
+              <p class="text-lg font-medium">Sensor: {{ sensor.tipo }}</p>
+              <p class="text-lg font-medium">VolumeId: {{ sensor.volumeId }}</p>
+            </a>
+          </div>
+        </div>
+      </div>
     </div>
   </template>
   
 <script>
 import api from "@/api/api.js";
 import { useAuthStore } from "@/stores/auth.js";
+import { useRouter } from "vue-router";
 
 export default {
   setup() {
     const authStore = useAuthStore();
+    const router = useRouter(); 
+    
+    if (!authStore.user) {
+      router.push("/login");
+    }
+
     return {
       authStore,
     };

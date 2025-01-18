@@ -179,7 +179,9 @@ const routes = [
     name:'EditarGestor',
     component: () => import('@/views/EditarGestor.vue'),
     meta: { layout: Layout },
-  }
+  },
+  
+
 
 
 

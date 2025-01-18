@@ -45,8 +45,21 @@
   <script>
   import api from "@/api/api.js";
   import { useAuthStore } from "@/stores/auth.js";
+  import { useRouter } from "vue-router";
   
   export default {
+    setup() {
+    const authStore = useAuthStore();
+    const router = useRouter(); 
+    
+    if (!authStore.user) {
+      router.push("/login");
+    }
+
+    return {
+      authStore,
+    };
+  },
     data() {
       return {
         sensores: [],
