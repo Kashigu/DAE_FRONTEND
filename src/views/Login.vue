@@ -81,7 +81,7 @@ export default {
         await authStore.login({username: this.username, password: this.password});
         this.errorMessage = '';
         // Redirect or handle successful login
-        await router.push('/encomendas');
+        await router.push('/perfil');
       } catch (error) {
         console.error('Error during login:', error);
         this.errorMessage = 'Invalid username or password.';

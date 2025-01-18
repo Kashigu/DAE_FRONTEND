@@ -58,6 +58,27 @@ const routes = [
     component: () => import('@/views/AddMedicoes.vue'),
     meta: { layout: Layout },
   },
+
+  {
+    path: '/perfil',
+    name: 'Perfil',
+    component: () => import('@/views/Perfil.vue'),
+    meta: { layout: Layout },
+  },
+
+  {
+    path: '/editar-perfil',
+    name: 'EditarPerfil',
+    component: () => import('@/views/EditarPerfil.vue'),
+    meta: { layout: Layout },
+  },
+
+    {
+      path:'/register',
+      name:'Register',
+      component: () => import('@/views/Register.vue'),
+      meta: { layout: Layout },
+    }
 ];
 
 const router = createRouter({
