@@ -180,9 +180,20 @@ const routes = [
     component: () => import('@/views/EditarGestor.vue'),
     meta: { layout: Layout },
   },
-  
 
 
+  {
+    path:'/mudar-password',
+    name:'MudarPassword',
+    component: () => import('@/views/MudarPassword.vue'),
+    meta: { layout: Layout },
+  },
+  {
+    path:'/volumes/all',
+    name:'VolumesAll',
+    component: () => import('@/views/VolumesAll.vue'),
+    meta: { layout: Layout },
+  }
 
 
 

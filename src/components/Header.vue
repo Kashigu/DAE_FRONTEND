@@ -22,6 +22,14 @@
         <router-link to="/register" class="hover:text-gray-200 mx-2">Registar</router-link>
       </div>
 
+       <!-- Funcionario Section -->
+      <div v-if="authStore.isUserLoggedIn && authStore.user?.role === 'Funcionario'" class="text-white font-bold flex justify-end px-6">
+        <router-link to="/sensor" class="hover:text-gray-200 mx-2">Sensores</router-link>
+        <router-link to="/volumes/all" class="hover:text-gray-200 mx-2">Volumes</router-link>
+        <router-link to="/perfil" class="hover:text-gray-200 mx-2">Perfil</router-link>
+        <router-link to="/login" class="hover:text-gray-200 mx-2">Logout</router-link>
+      </div>
+
       <!-- Gestor Section -->
       <div v-if="authStore.isUserLoggedIn && authStore.user?.role === 'Gestor'" class="text-white font-bold flex justify-end px-6">
         <router-link to="/sensor" class="hover:text-gray-200 mx-2">Sensores</router-link>

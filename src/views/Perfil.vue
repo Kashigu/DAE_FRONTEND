@@ -44,6 +44,12 @@
         >
           Apagar
         </button>
+        <button
+          @click="changePassword"
+          class="px-6 py-2 bg-blue-500 text-white font-semibold rounded hover:bg-red-600"
+          >
+          Mudar Password
+        </button>
       </div>
       
     </div>
@@ -166,7 +172,11 @@ export default {
         alert("Ocorreu um erro ao tentar enviar o email.");
       }
     },
-
+    // Método para mudar a password
+    changePassword() {
+      // Redirecionar para a página de mudança de password (ajuste conforme a sua rota)
+      this.$router.push("/mudar-password");
+    },
     // Método para editar perfil
     editProfile() {
       // Redirecionar para a página de edição (ajuste conforme a sua rota)
