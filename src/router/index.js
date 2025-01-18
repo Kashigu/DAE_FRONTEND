@@ -185,8 +185,13 @@ const routes = [
     name:'MudarPassword',
     component: () => import('@/views/MudarPassword.vue'),
     meta: { layout: Layout },
+  },
+  {
+    path:'/volumes/all',
+    name:'VolumesAll',
+    component: () => import('@/views/VolumesAll.vue'),
+    meta: { layout: Layout },
   }
-
 
 
 

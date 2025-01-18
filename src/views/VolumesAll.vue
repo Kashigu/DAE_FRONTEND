@@ -4,7 +4,7 @@
       <button @click="$router.back()" class="px-4 py-2 bg-blue-500 text-white font-semibold rounded hover:bg-blue-600">
         Voltar
       </button>
-      <h1 class="text-4xl font-bold text-center flex-grow">Lista de Volumes da Encomenda #{{ encomendaCodigo }}</h1>
+      <h1 class="text-4xl font-bold text-center flex-grow">Lista de Volumes</h1>
     </div>
 
     <!-- Lista de Volumes -->
@@ -90,7 +90,6 @@ export default {
 
     // Variáveis reativas
     const volumes = ref([]);
-    const encomendaCodigo = ref(null);
     const availableSensors = ref([]);
     const loading = ref(false);
 
@@ -104,11 +103,9 @@ export default {
           throw new Error("Utilizador não autenticado.");
         }
 
-        // Obter o código da encomenda
-        encomendaCodigo.value = route.params.id;
 
         // Obter volumes
-        const responseVolumes = await api.get(`/encomenda/${encomendaCodigo.value}/volumes`);
+        const responseVolumes = await api.get(`/volume/all`);
         if (responseVolumes.data && Array.isArray(responseVolumes.data)) {
           volumes.value = responseVolumes.data;
         } else {
@@ -199,7 +196,6 @@ export default {
     return {
       authStore,
       volumes,
-      encomendaCodigo,
       availableSensors,
       loading,
       goToProdutoPage,
