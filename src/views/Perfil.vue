@@ -45,13 +45,67 @@
           Apagar
         </button>
       </div>
+      
     </div>
+    <!-- Send Email -->
+<div class="bg-white rounded-lg shadow-md p-6 mt-8">
+  <h2 class="text-2xl font-bold text-black mb-4">Mandar Email</h2>
+  <form id="emailForm" class="space-y-4">
+    <!-- Username Input -->
+    <div>
+      <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
+      <input
+        type="text"
+        id="username"
+        name="username"
+        class="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+        placeholder="Enter username"
+        required
+      />
+    </div>
+
+    <!-- Subject Input -->
+    <div>
+      <label for="subject" class="block text-sm font-medium text-gray-700">Subject</label>
+      <input
+        type="text"
+        id="subject"
+        name="subject"
+        class="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+        placeholder="Enter subject"
+        required
+      />
+    </div>
+
+    <!-- Body Input -->
+    <div>
+      <label for="body" class="block text-sm font-medium text-gray-700">Body</label>
+      <textarea
+        id="body"
+        name="body"
+        class="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+        placeholder="Enter email body"
+        rows="4"
+        required
+      ></textarea>
+    </div>
+
+    <!-- Send Button -->
+    <button
+      type="button"
+      @click="sendEmail"
+      class="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-600"
+    >
+      Send Email
+    </button>
+  </form>
+</div>
+
   </div>
 </template>
 
 <script>
 import { useAuthStore } from "@/stores/auth.js";
-import { useRouter } from "vue-router";
 import api from "@/api/api.js";
 
 export default {
@@ -70,6 +124,45 @@ export default {
     }
   },
   methods: {
+// Method to send email
+  async sendEmail() {
+      const username = document.getElementById("username").value;
+      const subject = document.getElementById("subject").value;
+      const body = document.getElementById("body").value;
+
+      // Validate inputs
+      if (!username || !subject || !body) {
+        alert("Por favor, preencha todos os campos.");
+        return;
+      }
+
+      try {
+        // Make API request to send email
+        const response = await api.post(`/email/${username}/send`, {
+          subject,
+          body,
+        });
+
+        if (response.status === 200) {
+          alert("Email enviado com sucesso!");
+        } else {
+          alert("Erro ao enviar email.");
+        }
+      } catch (error) {
+        console.error("Erro ao enviar email:", error);
+        alert("Ocorreu um erro ao tentar enviar o email.");
+      }
+    },
+
+
+
+
+
+
+
+
+
+
     // Método para editar perfil
     editProfile() {
       // Redirecionar para a página de edição (ajuste conforme a sua rota)
