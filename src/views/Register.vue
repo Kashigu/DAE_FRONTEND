@@ -8,7 +8,7 @@
       >
         Voltar
       </button>
-      <h1 class="text-4xl font-bold text-center flex-grow">Registrar Novo Usuário</h1>
+      <h1 class="text-4xl font-bold text-center flex-grow">Registrar Novo Utilizador</h1>
     </div>
 
     <!-- Formulário de Registro -->
@@ -17,7 +17,7 @@
 
       <form @submit.prevent="registerUser">
         <div class="mb-4">
-          <label class="text-lg font-medium">Nome de Usuário:</label>
+          <label class="text-lg font-medium">Nome de Utilizador:</label>
           <input
               v-model="user.username"
               type="text"
@@ -109,7 +109,7 @@ export default {
         const response = await api.post("/cliente", this.user);
 
         if (response.status === 201) {
-          alert("Usuário registrado com sucesso!");
+          alert("Utilizador registrado com sucesso!");
           this.$router.push("/login"); // Redireciona para a página de login após o registro
         } else {
           alert("Erro ao registrar o usuário.");

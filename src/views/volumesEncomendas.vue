@@ -1,28 +1,16 @@
 <template>
   <div class="min-h-screen bg-gray-100 p-8">
     <div class="flex items-center mb-8">
-      <!-- Back button aligned to the left -->
-      <button
-          @click="$router.back()"
-          class="px-4 py-2 bg-blue-500 text-white font-semibold rounded hover:bg-blue-600"
-      >
+      <button @click="$router.back()" class="px-4 py-2 bg-blue-500 text-white font-semibold rounded hover:bg-blue-600">
         Voltar
       </button>
-      <h1 class="text-4xl font-bold text-center flex-grow">
-        Lista de Volumes da Encomenda #{{ encomendaCodigo }}
-      </h1>
+      <h1 class="text-4xl font-bold text-center flex-grow">Lista de Volumes da Encomenda #{{ encomendaCodigo }}</h1>
     </div>
 
     <!-- Lista de Volumes -->
     <div class="grid grid-cols-1 gap-8">
-      <div
-          v-for="(volume, index) in volumes"
-          :key="index"
-          class="bg-white rounded-lg shadow-md p-6"
-      >
-        <h2 class="text-2xl font-bold text-black mb-4">
-          ID do Volume: {{ volume.id }}
-        </h2>
+      <div v-for="(volume, index) in volumes" :key="index" class="bg-white rounded-lg shadow-md p-6">
+        <h2 class="text-2xl font-bold text-black mb-4">ID do Volume: {{ volume.id }}</h2>
         <p class="text-lg font-medium">Estado: {{ volume.estado }}</p>
 
         <!-- Produtos -->
@@ -30,10 +18,7 @@
           <span>Produtos:</span>
           <ul>
             <li v-for="(produtoId, idx) in volume.produtosIds" :key="idx">
-              <button
-                  @click="goToProdutoPage(produtoId, volume.id)"
-                  class="text-blue-500 hover:underline"
-              >
+              <button @click="goToProdutoPage(produtoId, volume.id)" class="text-blue-500 hover:underline">
                 Produto ID: {{ produtoId }} (Quantidade: {{ volume.produtosQuants[idx] }})
               </button>
             </li>
@@ -44,11 +29,11 @@
         <span class="text-lg font-medium">
           <span>Sensores:</span>
           <ul>
+            <li v-if="volume.sensores && volume.sensores.length === 0" class="text-gray-500">
+              Nenhum sensor atribuído a este volume.
+            </li>
             <li v-for="(sensor, idx) in volume.sensores" :key="idx">
-              <button
-                  @click="goToSensorPage(sensor.id)"
-                  class="text-blue-500 hover:underline"
-              >
+              <button @click="goToSensorPage(sensor.id)" class="text-blue-500 hover:underline">
                 Sensor ID: {{ sensor.id }} - Tipo: {{ sensor.tipo }}
               </button>
             </li>
@@ -57,19 +42,12 @@
 
         <!-- Adicionar Sensor (visível apenas para Gestores) -->
         <div v-if="authStore.user.role === 'Gestor'" class="mt-4">
-          <!-- Dropdown para selecionar o Sensor -->
           <select v-model="volume.selectedSensorId" class="p-2 border rounded">
             <option value="" disabled selected>Selecione um Sensor</option>
-            <option
-                v-for="sensor in availableSensors"
-                :key="sensor.id"
-                :value="sensor.id"
-            >
+            <option v-for="sensor in availableSensors.filter(s => !volume.sensoresIds.includes(s.id))" :key="sensor.id" :value="sensor.id">
               ID: {{ sensor.id }} - Tipo: {{ sensor.tipo }}
             </option>
           </select>
-
-          <!-- Mensagem de erro quando nenhum sensor for selecionado -->
           <div v-if="volume.selectedSensorId === ''" class="text-red-500 text-sm mt-2">
             Por favor, selecione um sensor.
           </div>
@@ -83,12 +61,8 @@
           </button>
         </div>
 
-        <!-- Editar botão (visível apenas para Gestores) -->
         <div v-if="authStore.user.role === 'Gestor'" class="mt-4">
-          <button
-              @click="editVolume(volume.id)"
-              class="px-4 py-2 bg-yellow-500 text-white font-semibold rounded hover:bg-yellow-600"
-          >
+          <button @click="editVolume(volume.id)" class="px-4 py-2 bg-yellow-500 text-white font-semibold rounded hover:bg-yellow-600">
             Editar Volume
           </button>
         </div>
@@ -102,104 +76,107 @@
   </div>
 </template>
 
-
 <script>
+import { ref, onMounted } from 'vue';
+import { useRoute, useRouter } from 'vue-router';  // Importar useRouter para obter o router
 import api from "@/api/api.js";
 import { useAuthStore } from "@/stores/auth.js";
 
 export default {
-  data() {
-    return {
-      volumes: [], // Lista de volumes
-      encomendaCodigo: null, // Código da encomenda
-      availableSensors: [], // Lista de sensores disponíveis
-      loading: false, // Variável de carregamento
-    };
-  },
   setup() {
-    const authStore = useAuthStore(); // Usar o authStore aqui
+    const authStore = useAuthStore();
+    const route = useRoute();
+    const router = useRouter(); // Usando useRouter para acessar o router
 
-    return {
-      authStore, // Retornar o authStore para usá-lo no template
+    // Variáveis reativas
+    const volumes = ref([]);
+    const encomendaCodigo = ref(null);
+    const availableSensors = ref([]);
+    const loading = ref(false);
+
+    // Função assíncrona para obter volumes e sensores
+    const fetchVolumesAndSensors = async () => {
+      try {
+        await authStore.getToken();  // Garantir que o token seja obtido
+
+        // Verificar se está logado
+        if (!authStore.isLoggedIn) {
+          throw new Error("Usuário não autenticado.");
+        }
+
+        // Obter o código da encomenda
+        encomendaCodigo.value = route.params.id;
+
+        // Obter volumes
+        const responseVolumes = await api.get(`/encomenda/${encomendaCodigo.value}/volumes`);
+        if (responseVolumes.data && Array.isArray(responseVolumes.data)) {
+          volumes.value = responseVolumes.data;
+        } else {
+          volumes.value = [];
+        }
+
+        // Obter sensores disponíveis
+        const responseSensors = await api.get('/sensor/all');
+        availableSensors.value = responseSensors.data;
+
+        // Associar sensores aos volumes
+        volumes.value.forEach(volume => {
+          volume.sensores = volume.sensoresIds
+              ? volume.sensoresIds.map(sensorId => availableSensors.value.find(sensor => sensor.id === sensorId)).filter(sensor => sensor)
+              : [];
+          volume.selectedSensorId = ""; // Inicializa a seleção de sensor
+        });
+
+      } catch (error) {
+        console.error("Erro ao obter volumes ou sensores:", error.message);
+      }
     };
-  },
-  async created() {
-    try {
-      const authStore = useAuthStore(); // Garantir que o authStore seja acessado aqui também
-      await authStore.getToken();
 
-      // Verificar se está logado
-      if (!authStore.isLoggedIn) {
-        throw new Error("Usuário não autenticado.");
-      }
+    // Chama a função de obter volumes e sensores ao montar o componente
+    onMounted(() => {
+      fetchVolumesAndSensors();
+    });
 
-      // Obter o 'codigo' dos parâmetros da rota
-      this.encomendaCodigo = this.$route.params.id;
-      const responseVolumes = await api.get(`/encomenda/${this.encomendaCodigo}/volumes`);
-      console.log("Volumes:", responseVolumes.data);
+    // Função de navegação
+    const goToProdutoPage = (produtoId, volumeId) => {
+      router.push(`/produtos/${produtoId}/volume/${volumeId}`); // Usando o router diretamente
+    };
 
-      // Verificar se existem volumes
-      if (responseVolumes.data && Array.isArray(responseVolumes.data)) {
-        this.volumes = responseVolumes.data.map(volume => ({
-          ...volume,
-          selectedSensorId: "", // Inicializa o selectedSensorId para cada volume
-          sensores: volume.sensores || [], // Garante que 'sensores' seja um array
-        }));
-      } else {
-        this.volumes = [];
-      }
+    const goToSensorPage = (sensorId) => {
+      router.push({ name: 'Sensores', params: { id: sensorId } }); // Usando o router diretamente
+    };
 
-      // Obter a lista de sensores disponíveis de /sensor/all
-      const responseSensors = await api.get('/sensor/all');
-      console.log("Sensores Disponíveis:", responseSensors.data);
-      this.availableSensors = responseSensors.data;
+    const editVolume = (volumeId) => {
+      router.push(`/editarVolume/${volumeId}`); // Usando o router diretamente
+    };
 
-    } catch (error) {
-      console.error("Error fetching volumes or sensors:", error.message);
-    }
-  },
-  methods: {
-    goToProdutoPage(produtoId, volumeId) {
-      // Redireciona para a página de produto com o ID
-      this.$router.push(`/produtos/${produtoId}/volume/${volumeId}`);
-    },
-    goToSensorPage(sensorId) {
-      // Redireciona para a página de sensor com o ID
-      this.$router.push(`/sensores/${sensorId}`);
-    },
-    editVolume(volumeId) {
-      // Redireciona para a página de edição do volume
-      this.$router.push(`/editarVolume/${volumeId}`);
-    },
-    async addSensorToVolume(volumeId) {
-      const volume = this.volumes.find(v => v.id === volumeId);
-      const selectedSensorId = volume.selectedSensorId; // Acessar diretamente do volume
+    // Função para adicionar sensor ao volume
+    const addSensorToVolume = async (volumeId) => {
+      const volume = volumes.value.find(v => v.id === volumeId);
+      const selectedSensorId = volume.selectedSensorId;
 
-      // Verifica se um sensor foi selecionado
       if (!selectedSensorId) {
         alert("Por favor, selecione um sensor.");
         return;
       }
 
-      // Verifica se o sensor já foi adicionado
       if (volume.sensores.some(sensor => sensor.id === selectedSensorId)) {
         alert("Este sensor já foi adicionado a este volume.");
         return;
       }
 
       try {
-        this.loading = true;
-
-        const selectedSensor = this.availableSensors.find(sensor => sensor.id === selectedSensorId);
+        loading.value = true;
+        const selectedSensor = availableSensors.value.find(sensor => sensor.id === selectedSensorId);
         if (!selectedSensor) {
           alert("Sensor não encontrado.");
-          this.loading = false;
+          loading.value = false;
           return;
         }
 
         const sensorData = {
           tipo: selectedSensor.tipo,
-          ativo: true, // Ajuste conforme necessário
+          ativo: true,
           volumeId: volumeId,
         };
 
@@ -207,18 +184,30 @@ export default {
 
         if (response.data) {
           alert("Sensor adicionado com sucesso!");
-          // Atualiza a lista de sensores do volume após adicionar
           volume.sensores.push(response.data); // Adiciona o sensor ao volume
         }
 
-        volume.selectedSensorId = ""; // Limpa o campo de seleção após adicionar
-
+        volume.selectedSensorId = ""; // Limpa a seleção do sensor após a adição
       } catch (error) {
         console.error("Erro ao adicionar o sensor:", error.message);
       } finally {
-        this.loading = false;
+        loading.value = false;
       }
-    }
-  }
+    };
+
+    // Retorna os dados para o template
+    return {
+      authStore,
+      volumes,
+      encomendaCodigo,
+      availableSensors,
+      loading,
+      goToProdutoPage,
+      goToSensorPage,
+      editVolume,
+      addSensorToVolume,
+    };
+  },
 };
+
 </script>
