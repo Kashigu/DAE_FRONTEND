@@ -45,7 +45,8 @@
 
       <!-- Sensor Section -->
       <div v-if="authStore.isUserLoggedIn && authStore.user?.role === 'SensorAuth'" class="text-white font-bold flex justify-end px-6">
-        <router-link to="/sensor" class="hover:text-gray-200 mx-2">Sensores</router-link>
+        <router-link to='/sensor' class="hover:text-gray-200 mx-2">Sensores</router-link>
+        <router-link to="/perfil" class="hover:text-gray-200 mx-2">Perfil</router-link>
         <router-link to="/login" class="hover:text-gray-200 mx-2">Logout</router-link>
       </div>
 

@@ -57,6 +57,21 @@
           />
         </div>
 
+        <!-- Dropdown para selecionar sensores -->
+        <div class="mb-4">
+          <label class="text-lg font-medium">Selecionar Sensor:</label>
+          <select
+              v-model="selectedSensor"
+              required
+              class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option disabled value="">Selecione um sensor</option>
+            <option v-for="sensor in availableSensores" :key="sensor.id" :value="sensor.id">
+              {{ sensor.tipo }} - ID: {{ sensor.id }}
+            </option>
+          </select>
+        </div>
+
         <div class="mt-6 flex justify-end">
           <button
               type="submit"
@@ -82,17 +97,44 @@ export default {
         email: "",     // Email do sensor
         password: "",  // Senha do sensor
       },
+      selectedSensor: null, // Sensor selecionado no dropdown
+      availableSensores: [], // Lista de sensores disponíveis
     };
   },
+  created() {
+    this.fetchSensores(); // Carregar os sensores quando o componente for criado
+  },
   methods: {
+    // Método para buscar sensores do endpoint
+    async fetchSensores() {
+      try {
+        const response = await api.get("/sensor/all");
+        if (response.status === 200) {
+          // Filtrar sensores com sensorAuthUsername = null
+          this.availableSensores = response.data.filter(sensor => sensor.sensorAuthUsername === null);
+        } else {
+          alert("Erro ao carregar sensores.");
+        }
+      } catch (error) {
+        console.error("Erro ao carregar sensores:", error);
+        alert("Erro ao tentar carregar os sensores.");
+      }
+    },
     // Método para registrar o sensor
     async registerSensor() {
+      if (!this.selectedSensor) {
+        alert("Por favor, selecione um sensor.");
+        return;
+      }
       try {
-        const response = await api.post("/sensorAuth", this.sensor); // Envia os dados para o servidor
+        const response = await api.post("/sensorAuth", {
+          ...this.sensor,
+          sensor_id: this.selectedSensor, // Use diretamente this.selectedSensor
+        });
 
         if (response.status === 200) {
           alert("Sensor registrado com sucesso!");
-          this.$router.push("/sensores");  // Redireciona para a lista de sensores
+          this.$router.back();
         } else {
           alert("Erro ao registrar o sensor.");
         }

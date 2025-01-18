@@ -1,12 +1,14 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import Home from '@/views/Home.vue';
-import Layout from '@/layout.vue'; // Your main layout
+import Layout from '@/layout.vue';
+import api from "@/api/api.js"; // Your main layout
+import { useAuthStore } from '@/stores/auth'; // Importando a store de autenticação
 
 const routes = [
   {
     path: '/',
     name: 'Home',
-    component: Home,
+    component: () => import('@/views/Login.vue'),
     meta: { layout: Layout }, // Default layout
   },
 
@@ -203,5 +205,31 @@ const router = createRouter({
   history: createWebHistory(),
   routes,
 });
+
+// Verificar se o usuário deve ser redirecionado antes de acessar a rota de Sensores
+router.beforeEach(async (to, from, next) => {
+  const authStore = useAuthStore();
+  console.log("Interceptando rota:", to.name);
+
+  if (to.name === 'Sensor' && authStore.isLoggedIn && authStore.user.role === 'SensorAuth') {
+    try {
+      const response = await api.get(`/sensorAuth/${authStore.user.username}`);
+      console.log("Resposta da API:", response);
+
+      if (response.status === 200) {
+        const sensorId = response.data.sensor_id;
+        next({ name: 'AddMedicoes', params: { id: sensorId } });
+      } else {
+        next();
+      }
+    } catch (error) {
+      console.error("Erro ao buscar dados do sensor:", error);
+      next();
+    }
+  } else {
+    next();
+  }
+});
+
 
 export default router;
