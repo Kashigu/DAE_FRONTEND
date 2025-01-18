@@ -90,9 +90,11 @@
     async created() {
       try {
         const authStore = useAuthStore();
-        if (authStore.user.role !== "SensorAuth") {
-          this.$router.push("/login");
-          return;
+        // Corrigir a chamada de getToken para ser assíncrona
+        await authStore.getToken();
+        // Verificar se está logado
+        if (!authStore.isLoggedIn) {
+          throw new Error("Usuário não autenticado.");
         }
         const response = await api.get("/sensor/all");
         this.sensores = response.data;

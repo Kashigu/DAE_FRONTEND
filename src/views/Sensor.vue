@@ -16,8 +16,8 @@
           class="bg-white rounded-lg shadow-md p-6"
         >
           <!-- Encomenda Information Clicas no sensor e vês o historico--> 
-          <a :href="'/AddMedicoes/' + sensor.codigo">
-          <h2 class="text-2xl font-bold text-black mb-4">Código: {{ sensor.codigo }}</h2>
+          <a :href="'/AddMedicoes/' + sensor.id">
+          <h2 class="text-2xl font-bold text-black mb-4">Código: {{ sensor.id }}</h2>
           <p class="text-lg font-medium">Estado: {{ sensor.ativo }}</p>
           <p class="text-lg font-medium">Morada: {{ sensor.tipo }}</p>
           <p class="text-lg font-medium">Cliente: {{ sensor.volume }}</p>
@@ -39,10 +39,13 @@
     async created() {
       try {
         const authStore = useAuthStore();
-        /*if(!authStore.isLoggedIn){
-          this.$router.push("/login");
-          return;
-        }*/
+        // Corrigir a chamada de getToken para ser assíncrona
+        await authStore.getToken();
+
+        // Verificar se está logado
+        if (!authStore.isLoggedIn) {
+          throw new Error("Usuário não autenticado.");
+        }
        
         console.log(authStore.user.role);
         let endPoint;
