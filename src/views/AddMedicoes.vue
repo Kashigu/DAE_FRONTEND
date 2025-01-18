@@ -32,26 +32,6 @@
           </button>
         </div>
       </div>
-  
-      <!-- Lista de Sensores -->
-      <div class="grid grid-cols-1 gap-8">
-        <div
-          v-for="(sensor, index) in sensores"
-          :key="index"
-          class="bg-white rounded-lg shadow-md p-6"
-        >
-          <!-- Sensor Information -->
-          <h2
-            @click="viewSensorCode(sensor.codigo)"
-            class="text-2xl font-bold text-black mb-4 cursor-pointer hover:underline"
-          >
-            Código: {{ sensor.codigo }}
-          </h2>
-          <p class="text-lg font-medium">Estado: {{ sensor.ativo }}</p>
-          <p class="text-lg font-medium">Morada: {{ sensor.tipo }}</p>
-          <p class="text-lg font-medium">Cliente: {{ sensor.volume }}</p>
-        </div>
-      </div>
     </div>
   </template>
   
