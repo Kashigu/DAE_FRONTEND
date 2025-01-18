@@ -56,6 +56,7 @@
     </div>
   </div>
 </template>
+
 <script>
 import { ref, onMounted, computed } from 'vue';
 import { useRouter } from 'vue-router';
@@ -66,6 +67,12 @@ export default {
   setup() {
     const authStore = useAuthStore();
     const router = useRouter();
+
+    // Verificar se o usuário está autenticado
+    if (!authStore.isLoggedIn) {
+      alert("Você precisa estar logado para acessar esta página.");
+      router.push('/login'); // Redirecionar para a página de login
+    }
 
     // Variáveis reativas
     const produtos = ref([]);

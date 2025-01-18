@@ -106,6 +106,13 @@ const routes = [
     path: '/produtos/criar',
     name: 'CriarProduto',
     component: () => import('@/views/CriarProduto.vue'),
+    meta: { layout: Layout },
+  },
+  {
+    path:'/produtos/editar/:id',
+    name:'EditarProduto',
+    component: () => import('@/views/EditarProduto.vue'),
+    meta: { layout: Layout },
   }
 
 
