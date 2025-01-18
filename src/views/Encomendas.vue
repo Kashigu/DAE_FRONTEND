@@ -22,10 +22,10 @@
         >
           <!-- Encomenda Information -->
            <a :href="'/volumesEncomendas/' + encomenda.codigo">
-          <h2 class="text-2xl font-bold text-black mb-4">Código: {{ encomenda.codigo }}</h2>
+          <h2 class="text-2xl font-bold text-black mb-4">Encomenda #{{ encomenda.codigo }}</h2>
           <p class="text-lg font-medium">Estado: {{ encomenda.estado }}</p>
-          <p class="text-lg font-medium">Morada: {{ encomenda.morada }}</p>
-          <p class="text-lg font-medium">Cliente: {{ encomenda.clienteUsername }}</p>
+          <p class="text-lg font-medium">Morada de Envio: {{ encomenda.morada }}</p>
+          <p v-if="authStore.user.role!='Cliente'" class="text-lg font-medium">Cliente: {{ encomenda.clienteUsername }}</p>
            </a>
         </div>
       </div>
@@ -39,6 +39,13 @@
     data() {
       return {
         encomendas: [],
+      };
+    },
+    setup() {
+      const authStore = useAuthStore(); // Access the auth store
+
+      return {
+        authStore,
       };
     },
     async created() {

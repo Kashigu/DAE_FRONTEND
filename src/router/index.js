@@ -55,7 +55,7 @@ const routes = [
   {
     path: '/AddMedicoes/:id?',
     name: 'AddMedicoes',
-    component: () => import('@/views/addMedicoes.vue'),
+    component: () => import('@/views/AddMedicoes.vue'),
     meta: { layout: Layout },
   },
 ];
