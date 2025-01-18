@@ -2,12 +2,6 @@
   <div class="min-h-screen bg-gray-100 p-8">
     <!-- Cabeçalho -->
     <div class="flex items-center mb-8">
-      <button
-          @click="$router.back()"
-          class="px-4 py-2 bg-blue-500 text-white font-semibold rounded hover:bg-blue-600"
-      >
-        Voltar
-      </button>
       <h1 class="text-4xl font-bold text-center flex-grow">Registrar Novo Utilizador</h1>
     </div>
 

@@ -60,10 +60,6 @@
           alert("Por favor, escreva algo antes de enviar.");
           return;
         }
-        // Send user input logic (replace with actual API endpoint)
-        console.log("Sending user input:", this.userInput);
-        
-
         const medicoes = {
           data: Date.now(),
           valor: this.userInput,
@@ -78,9 +74,9 @@
     async created() {
       try {
         const authStore = useAuthStore();
-        // Corrigir a chamada de getToken para ser assíncrona
+        
         await authStore.getToken();
-        // Verificar se está logado
+        
         if (!authStore.isLoggedIn) {
           throw new Error("Utilizador não autenticado.");
         }

@@ -9,7 +9,15 @@
       </div>
 
       <!-- Anon -->
-      <div v-if="!authStore.isLoggedIn" class="text-white font-bold flex justify-end px-6">
+      <div v-if="!authStore.isLoggedIn && page == 'register'" class="text-white font-bold flex justify-end px-6">
+        <router-link to="/login" class="text-white justify-end hover:text-gray-200">Login</router-link>
+      </div>
+
+      <div v-else-if="!authStore.isLoggedIn && page == 'login'" class="text-white font-bold flex justify-end px-6">
+        <router-link to="/register" class="text-white justify-end hover:text-gray-200">Registar</router-link>
+      </div>
+
+      <div v-else-if="!authStore.isLoggedIn" class="text-white font-bold flex justify-end px-6">
         <router-link to="/login" class="text-white justify-end hover:text-gray-200">Login</router-link>
         <router-link to="/register" class="hover:text-gray-200 mx-2">Registar</router-link>
       </div>
@@ -46,6 +54,13 @@
 import { useAuthStore } from "@/stores/auth";
 
 export default {
+  data() {
+    return {
+      page: this.$route.path.split('/').pop(), // Obtém o último segmento do caminho
+    };
+  },
+  
+
   name: "Header",
   setup() {
     const authStore = useAuthStore(); // Access the auth store
@@ -56,6 +71,12 @@ export default {
     return {
       authStore,
     };
+  },
+  computed: {
+    page() {
+      // Automatically updates when the route changes
+      return this.$route.path.split('/').pop(); 
+    },
   },
 };
 </script>
