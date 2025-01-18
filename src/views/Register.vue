@@ -82,6 +82,7 @@
 <script>
 import api from "@/api/api.js";
 import { useRouter } from "vue-router";
+import { useAuthStore } from "@/stores/auth.js";
 
 export default {
   data() {
@@ -110,7 +111,13 @@ export default {
 
         if (response.status === 201) {
           alert("Utilizador registrado com sucesso!");
-          this.$router.push("/login"); // Redireciona para a página de login após o registro
+          // Verificar se o usuário está logado e é um gestor
+          const authStore = useAuthStore();
+          if (authStore.isLoggedIn && authStore.user.role === 'Gestor') {
+            this.$router.back(); // Volta para a página anterior se for gestor
+          } else {
+            this.$router.push("/login"); // Redireciona para o login caso contrário
+          }
         } else {
           alert("Erro ao registrar o usuário.");
         }

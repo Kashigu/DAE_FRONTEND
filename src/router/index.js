@@ -113,6 +113,18 @@ const routes = [
     name:'EditarProduto',
     component: () => import('@/views/EditarProduto.vue'),
     meta: { layout: Layout },
+  },
+  {
+    path:'/clientes',
+    name:'Clientes',
+    component: () => import('@/views/Clientes.vue'),
+    meta: { layout: Layout },
+  },
+  {
+    path: '/clientes/editar/:id',
+    name: 'EditarCliente',
+    component: () => import('@/views/EditarCliente.vue'),
+    meta: { layout: Layout },
   }
 
 
