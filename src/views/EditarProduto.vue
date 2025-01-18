@@ -129,7 +129,7 @@ export default {
       tresholdTipo: '',
     });
 
-    // Verificar se o usuário está logado
+    // Verificar se o Utilizador está logado
     if (!authStore.isLoggedIn) {
       alert("Você precisa estar logado para acessar esta página.");
       router.push('/login');

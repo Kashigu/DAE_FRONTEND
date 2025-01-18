@@ -68,7 +68,7 @@ export default {
     const authStore = useAuthStore();
     const router = useRouter();
 
-    // Verificar se o usuário está autenticado
+    // Verificar se o Utilizador está autenticado
     if (!authStore.isLoggedIn) {
       alert("Você precisa estar logado para acessar esta página.");
       router.push('/login'); // Redirecionar para a página de login

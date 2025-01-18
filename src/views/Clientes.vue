@@ -68,7 +68,7 @@ export default {
     const authStore = useAuthStore();
     const router = useRouter();
 
-    // Verificar se o usuário está logado e é Gestor
+    // Verificar se o Utilizador está logado e é Gestor
     if (!authStore.isLoggedIn || authStore.user.role !== 'Gestor') {
       alert("Você precisa estar logado como Gestor para acessar esta página.");
       router.push('/login');

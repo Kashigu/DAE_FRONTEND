@@ -81,7 +81,7 @@ export default {
 
       // Verificar se está logado
       if (!authStore.isLoggedIn) {
-        throw new Error("Usuário não autenticado.");
+        throw new Error("Utilizador não autenticado.");
       }
 
       let endPoint;

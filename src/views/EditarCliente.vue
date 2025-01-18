@@ -78,7 +78,7 @@ export default {
     };
   },
   async created() {
-    // Verificar se o usuário está logado como gestor
+    // Verificar se o Utilizador está logado como gestor
     const authStore = useAuthStore();
     if (!authStore.isLoggedIn || authStore.user.role !== 'Gestor') {
       this.$router.push('/login'); // Redireciona se não for gestor

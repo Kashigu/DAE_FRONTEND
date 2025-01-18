@@ -11,7 +11,7 @@
       <h2 class="text-2xl font-bold text-black mb-4">Informações do Perfil</h2>
 
       <div class="mb-4">
-        <label class="text-lg font-medium">Nome de Usuário:</label>
+        <label class="text-lg font-medium">Nome de Utilizador:</label>
         <p class="text-lg">{{ user.username }}</p>
       </div>
 
@@ -57,7 +57,7 @@ import api from "@/api/api.js";
 export default {
   data() {
     return {
-      user: {}, // Dados do usuário
+      user: {}, // Dados do Utilizador
     };
   },
   created() {
@@ -66,7 +66,7 @@ export default {
     if (authStore.user) {
       this.user = authStore.user;
     } else {
-      console.error("Usuário não encontrado!");
+      console.error("Utilizador não encontrado!");
     }
   },
   methods: {
@@ -81,11 +81,11 @@ export default {
       if (confirmation) {
         try {
           // Lógica para apagar o perfil
-          // Pode ser uma chamada para uma API para excluir o usuário ou deslogá-lo
+          // Pode ser uma chamada para uma API para excluir o Utilizador ou deslogá-lo
           const authStore = useAuthStore();
           await authStore.logout();  // Exemplo de logout após a exclusão
           this.$router.push("/login");  // Redireciona para a tela de login após a exclusão
-          const response = await api.delete('cliente/'+this.user.username); // Exemplo de chamada para deletar o usuário
+          const response = await api.delete('cliente/'+this.user.username); // Exemplo de chamada para deletar o Utilizador
           if(response.status === 200){
             alert("Perfil apagado com sucesso!");
           } else {

@@ -125,7 +125,29 @@ const routes = [
     name: 'EditarCliente',
     component: () => import('@/views/EditarCliente.vue'),
     meta: { layout: Layout },
+  },
+  {
+    path: '/funcionarios',
+    name: 'Funcionarios',
+    component: () => import('@/views/Funcionarios.vue'),
+    meta: { layout: Layout },
+  },
+  {
+    path: '/funcionarios/criar',
+    name: 'CriarFuncionario',
+    component: () => import('@/views/CriarFuncionario.vue'),
+    meta: { layout: Layout },
+  },
+
+  /*
+  {
+    path: '/funcionarios/editar/:id',
+    name: 'EditarFuncionario',
+    component: () => import('@/views/EditarFuncionario.vue'),
+    meta: { layout: Layout },
   }
+  */
+
 
 
 ];

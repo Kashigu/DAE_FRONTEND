@@ -17,7 +17,7 @@
 
       <form @submit.prevent="updateProfile">
         <div class="mb-4">
-          <label class="text-lg font-medium">Nome de Usuário:</label>
+          <label class="text-lg font-medium">Nome de Utilizador:</label>
           <input
               v-model="user.username"
               type="text"
@@ -63,18 +63,18 @@ import api from "@/api/api.js";
 export default {
   data() {
     return {
-      user: {}, // Dados do usuário
+      user: {}, // Dados do Utilizador
     };
   },
   async created() {
     const authStore = useAuthStore();
     await authStore.getToken();
     if (authStore.user) {
-      this.user = {...authStore.user}; // Cria uma cópia dos dados do usuário para edição
+      this.user = {...authStore.user}; // Cria uma cópia dos dados do Utilizador para edição
       //remove role
       delete this.user.role;
     } else {
-      console.error("Usuário não encontrado!");
+      console.error("Utilizador não encontrado!");
     }
   },
   methods: {

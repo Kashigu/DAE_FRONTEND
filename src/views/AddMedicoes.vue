@@ -82,7 +82,7 @@
         await authStore.getToken();
         // Verificar se está logado
         if (!authStore.isLoggedIn) {
-          throw new Error("Usuário não autenticado.");
+          throw new Error("Utilizador não autenticado.");
         }
         const response = await api.get(`/sensor/${this.sensor_id}`);
         this.sensores = response.data;

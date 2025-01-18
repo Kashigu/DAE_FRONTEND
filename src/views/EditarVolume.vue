@@ -53,10 +53,10 @@ export default {
   async created() {
     try {
       const authStore = useAuthStore();
-      // Certifique-se de que o usuário está logado
+      // Certifique-se de que o Utilizador está logado
       await authStore.getToken();
       if (!authStore.isLoggedIn) {
-        throw new Error("Usuário não autenticado.");
+        throw new Error("Utilizador não autenticado.");
       }
 
       // Obter o ID do volume da rota

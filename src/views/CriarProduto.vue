@@ -130,12 +130,12 @@ export default {
       tresholdTipo: '',
     });
 
-    // Função para obter o token do usuário
+    // Função para obter o token do Utilizador
     const getUserToken = async () => {
       try {
         await authStore.getToken();
         if (!authStore.isLoggedIn) {
-          throw new Error("Usuário não autenticado.");
+          throw new Error("Utilizador não autenticado.");
         }
       } catch (error) {
         console.error(error.message);
@@ -163,7 +163,7 @@ export default {
       }
     };
 
-    // Chama a função para verificar o token e o login do usuário
+    // Chama a função para verificar o token e o login do Utilizador
     onMounted(() => {
       getUserToken();
     });

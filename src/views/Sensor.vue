@@ -44,7 +44,7 @@
 
         // Verificar se está logado
         if (!authStore.isLoggedIn) {
-          throw new Error("Usuário não autenticado.");
+          throw new Error("Utilizador não autenticado.");
         }
         
         console.log(authStore.user.role);

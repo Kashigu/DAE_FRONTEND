@@ -54,7 +54,7 @@ export default {
 
       // Verificar se está logado
       if (!authStore.isLoggedIn) {
-        throw new Error("Usuário não autenticado.");
+        throw new Error("Utilizador não autenticado.");
       }
 
       // Obtendo o código do produto e o código do volume a partir dos parâmetros da rota

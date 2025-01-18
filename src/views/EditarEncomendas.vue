@@ -62,7 +62,7 @@ export default {
       const authStore = useAuthStore();
       await authStore.getToken();
 
-      // Verificar se o usuário tem permissão para editar
+      // Verificar se o Utilizador tem permissão para editar
       if (!authStore.isLoggedIn || (authStore.user.role !== 'Gestor' && authStore.user.role !== 'Funcionario')) {
         this.$router.push('/login'); // Redirecionar para login se não autorizado
         return;

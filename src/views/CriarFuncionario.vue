@@ -8,18 +8,18 @@
       >
         Voltar
       </button>
-      <h1 class="text-4xl font-bold text-center flex-grow">Registrar Novo Utilizador</h1>
+      <h1 class="text-4xl font-bold text-center flex-grow">Criar Novo Funcionário</h1>
     </div>
 
-    <!-- Formulário de Registro -->
+    <!-- Formulário de Criação -->
     <div class="bg-white rounded-lg shadow-md p-6">
-      <h2 class="text-2xl font-bold text-black mb-4">Crie uma nova conta</h2>
+      <h2 class="text-2xl font-bold text-black mb-4">Cadastrar Novo Funcionário</h2>
 
-      <form @submit.prevent="registerUser">
+      <form @submit.prevent="createFuncionario">
         <div class="mb-4">
           <label class="text-lg font-medium">Nome de Utilizador:</label>
           <input
-              v-model="user.username"
+              v-model="funcionario.username"
               type="text"
               required
               class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -29,7 +29,7 @@
         <div class="mb-4">
           <label class="text-lg font-medium">Nome Completo:</label>
           <input
-              v-model="user.nome"
+              v-model="funcionario.nome"
               type="text"
               required
               class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -39,7 +39,7 @@
         <div class="mb-4">
           <label class="text-lg font-medium">Email:</label>
           <input
-              v-model="user.email"
+              v-model="funcionario.email"
               type="email"
               required
               class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -49,7 +49,7 @@
         <div class="mb-4">
           <label class="text-lg font-medium">Senha:</label>
           <input
-              v-model="user.password"
+              v-model="funcionario.password"
               type="password"
               required
               class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -59,7 +59,7 @@
         <div class="mb-4">
           <label class="text-lg font-medium">Confirmar Senha:</label>
           <input
-              v-model="user.confirmPassword"
+              v-model="funcionario.confirmPassword"
               type="password"
               required
               class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -71,7 +71,7 @@
               type="submit"
               class="px-6 py-2 bg-blue-500 text-white font-semibold rounded hover:bg-blue-600"
           >
-            Registrar
+            Criar Funcionário
           </button>
         </div>
       </form>
@@ -80,52 +80,66 @@
 </template>
 
 <script>
+import { useAuthStore } from "@/stores/auth.js";
 import api from "@/api/api.js";
 import { useRouter } from "vue-router";
-import { useAuthStore } from "@/stores/auth.js";
 
 export default {
   data() {
     return {
-      user: {
+      funcionario: {
         username: "",
         nome: "",
         email: "",
         password: "",
         confirmPassword: "",
-      }, // Dados do Utilizador
+      }, // Dados do funcionário
     };
   },
+  computed: {
+    isGestor() {
+      return this.$store.state.auth.user?.role === "Gestor"; // Verifica se o Utilizador logado é um gestor
+    },
+  },
   methods: {
-    // Método para registrar o Utilizador
-    async registerUser() {
-      // Verificar se as senhas são iguais
-      if (this.user.password !== this.user.confirmPassword) {
+    // Método para criar o funcionário
+    async createFuncionario() {
+      if (this.funcionario.password !== this.funcionario.confirmPassword) {
         alert("As senhas não coincidem.");
         return;
       }
 
+      if (!this.isGestor) {
+        alert("Você precisa ser um gestor para criar funcionários.");
+        return;
+      }
+
       try {
-        delete this.user.confirmPassword; // Remove o campo de confirmação de senha
-        const response = await api.post("/cliente", this.user);
+        // O ID do funcionário será o username
+        const funcionarioData = { ...this.funcionario, id: this.funcionario.username };
+
+        // Remove o campo de confirmação de senha antes de enviar
+        delete funcionarioData.confirmPassword;
+
+        // Envia a requisição para criar o funcionário
+        const response = await api.post("/funcionario", funcionarioData);
 
         if (response.status === 201) {
-          alert("Utilizador registrado com sucesso!");
-          // Verificar se o Utilizador está logado e é um gestor
-          const authStore = useAuthStore();
-          if (authStore.isLoggedIn && authStore.user.role === 'Gestor') {
-            this.$router.back(); // Volta para a página anterior se for gestor
-          } else {
-            this.$router.push("/login"); // Redireciona para o login caso contrário
-          }
+          alert("Funcionário criado com sucesso!");
+          this.$router.push("/funcionarios"); // Redireciona para a lista de funcionários
         } else {
-          alert("Erro ao registrar o Utilizador.");
+          alert("Erro ao criar funcionário.");
         }
       } catch (error) {
-        console.error("Erro ao registrar o utilizador:", error);
-        alert("Erro ao tentar registrar o utilizador.");
+        console.error("Erro ao criar funcionário:", error);
+        alert("Erro ao tentar criar o funcionário.");
       }
     },
+  },
+  created() {
+    if (!this.isGestor) {
+      this.$router.push("/login"); // Redireciona para login se o Utilizador não for gestor
+    }
   },
 };
 </script>
