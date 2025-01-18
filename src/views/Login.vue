@@ -51,7 +51,6 @@
 
 <script>
 import { useAuthStore } from '../stores/auth';
-import api from "@/api/api.js";
 import router from "@/router/index.js"; // Import the store
 
 export default {
@@ -78,7 +77,3 @@ export default {
   },
 };
 </script>
-
-<style>
-/* Optional: Add custom styles here */
-</style>

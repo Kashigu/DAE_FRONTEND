@@ -43,7 +43,21 @@ const routes = [
     name: 'Sensores',
     component: () => import('@/views/Sensores.vue'),
     meta: { layout: Layout },
-  }
+  },
+
+  {
+    path: '/sensor',
+    name: 'Sensor',
+    component: () => import('@/views/Sensor.vue'),
+    meta: { layout: Layout },
+  },
+
+  {
+    path: '/AddMedicoes/:id?',
+    name: 'AddMedicoes',
+    component: () => import('@/views/addMedicoes.vue'),
+    meta: { layout: Layout },
+  },
 ];
 
 const router = createRouter({
