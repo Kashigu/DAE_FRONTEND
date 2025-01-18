@@ -44,10 +44,15 @@
     async created() {
       try {
         const authStore = useAuthStore();
-        if(!authStore.isLoggedIn){
-          this.$router.push("/login");
-          return;
+        // Corrigir a chamada de getToken para ser assíncrona
+        await authStore.getToken();
+
+        // Verificar se está logado
+        if (!authStore.isLoggedIn) {
+          throw new Error("Usuário não autenticado.");
         }
+
+
         let endPoint;
         if(authStore.user.role === 'Cliente'){
           endPoint = "/encomenda/cliente/"+authStore.user.username;

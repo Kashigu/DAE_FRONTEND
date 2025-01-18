@@ -17,7 +17,6 @@ const routes = [
     component: () => import('@/views/Login.vue'),
     meta: { layout: Layout },
   },
-
   {
     path: '/encomendas',
     name: 'Encomenda',
@@ -33,7 +32,7 @@ const routes = [
   },
 
   {
-    path: '/produtos/:id?',
+    path: '/produtos/:id?/volume/:idVolume?',
     name: 'Produtos',
     component: () => import('@/views/Produtos.vue'),
     meta: { layout: Layout },
