@@ -12,25 +12,22 @@
       <div class="grid grid-cols-1 gap-8">
         <div
           v-for="(sensor, index) in sensores"
-          :key="sensor.id" 
+          :key="sensor.id"
           class="bg-white rounded-lg shadow-md p-6"
         >
-          <!-- Encomenda Information Clicas no sensor e vês o historico--> 
-
-          <router-link
-            v-if="authStore.isUserLoggedIn && authStore.user?.role === 'SensorAuth'"
-            :to="'/AddMedicoes/' + sensor.id"
-            class="block" 
-          >
+          <!-- Encomenda Information -->
+          <div>
             <h2 class="text-2xl font-bold text-black mb-4">Código: {{ sensor.id }}</h2>
-            <p class="text-lg font-medium">Estado: {{ sensor.ativo ? 'Ativo' : 'Inativo' }}</p>
-            <p class="text-lg font-medium">Sensor: {{ sensor.tipo }}</p>
-            <p class="text-lg font-medium">VolumeId: {{ sensor.volumeId }}</p>
-          </router-link>
-
-          <div v-else>
-            <h2 class="text-2xl font-bold text-black mb-4">Código: {{ sensor.id }}</h2>
-            <p class="text-lg font-medium">Estado: {{ sensor.ativo ? 'Ativo' : 'Inativo' }}</p>
+            <p class="text-lg font-medium">
+              Estado: 
+              <span 
+                :class="sensor.ativo ? 'text-green-500' : 'text-red-500'"
+                @click="toggleAtivo(sensor)"
+                class="cursor-pointer"
+              >
+                {{ sensor.ativo ? 'Ativo' : 'Inativo' }}
+              </span>
+            </p>
             <p class="text-lg font-medium">Sensor: {{ sensor.tipo }}</p>
             <p class="text-lg font-medium">VolumeId: {{ sensor.volumeId }}</p>
           </div>
@@ -39,48 +36,80 @@
     </div>
   </template>
   
-  <script>
-  import api from "@/api/api.js";
-  import {useAuthStore} from "@/stores/auth.js";
-  export default {
-    setup() {
+<script>
+import api from "@/api/api.js";
+import { useAuthStore } from "@/stores/auth.js";
+
+export default {
+  setup() {
+    const authStore = useAuthStore();
+    return {
+      authStore,
+    };
+  },
+  data() {
+    return {
+      sensores: [], // Lista de sensores
+    };
+  },
+  async created() {
+    try {
       const authStore = useAuthStore();
-      
+      // Corrigir a chamada de getToken para ser assíncrona
+      await authStore.getToken();
 
-      return {
-        authStore,
+      // Verificar se está logado
+      if (!authStore.isLoggedIn) {
+        throw new Error("Utilizador não autenticado.");
+      }
+
+      console.log(authStore.user.role);
+      let endPoint;
+      if (authStore.user.role !== 'Client') {
+        endPoint = "/sensor/all";
+      } else {
+        this.$router.push("/login");
+      }
+
+      // Fetch sensors data from the API
+      const response = await api.get(endPoint);
+      this.sensores = response.data;
+      console.log(this.sensores);
+    } catch (error) {
+      console.error("Error fetching sensors:", error);
+    }
+  },
+  methods: {
+   
+    async toggleAtivo(sensor) {
+      // Inverter o estado do sensor
+      const updatedAtivo = !sensor.ativo; 
+
+      // Update ao sensor
+      const updatedSensor = {
+        id: sensor.id,
+        ativo: updatedAtivo,
+        tipo: sensor.tipo,
+        volumeId: sensor.volumeId,
       };
-    },
-    data() {
-      return {
-        sensores: [],
-      };
-    },
-    async created() {
+
+      // Enviar o pedido PATCH para atualizar o sensor
       try {
-        const authStore = useAuthStore();
-        // Corrigir a chamada de getToken para ser assíncrona
-        await authStore.getToken();
+        const response = await api.patch(`/sensor/${sensor.id}`, updatedSensor);
 
-        // Verificar se está logado
-        if (!authStore.isLoggedIn) {
-          throw new Error("Utilizador não autenticado.");
+        if (response.status === 200) {
+          sensor.ativo = updatedAtivo; 
+          alert("Status atualizado com sucesso!");
+        } else {
+          alert("Erro ao atualizar status.");
         }
-        
-        console.log(authStore.user.role);
-        let endPoint;
-        if(authStore.user.role !== 'Client'){
-          endPoint = "/sensor/all";
-        }else{
-          this.$router.push("/login");
-        }
-        const response = await api.get(endPoint);
-        this.sensores = response.data;
-        console.log(this.sensores);
       } catch (error) {
-        console.error("Error fetching sensor:", error);
+        console.error("Erro ao atualizar status:", error);
+        alert("Ocorreu um erro ao tentar atualizar o status.");
       }
     },
-  };
-  </script>
+  },
+};
+</script>
+
   
