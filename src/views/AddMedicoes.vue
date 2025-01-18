@@ -9,7 +9,13 @@
         </button>
         <!-- Back button aligned to the left -->
         <h1 class="text-4xl font-bold text-center flex-grow">
-          Adicionar Medição ao Sensor {{ sensorId }}
+          Adicionar Medição ao Sensor Código {{ sensor_id }} 
+        </h1>
+      </div>
+      <div class="flex items-center mb-8">
+        <!-- Back button aligned to the left -->
+        <h1 class="text-4xl font-bold text-center flex-grow">
+          Sensor de {{ sensores.tipo }} 
         </h1>
       </div>
   
@@ -24,6 +30,7 @@
             class="flex-grow p-2 border border-gray-300 rounded-l-lg"
             placeholder="Medicoes"
           />
+          
           <button
             @click="sendInput"
             class="bg-blue-500 text-white px-4 py-2 rounded-r-lg hover:bg-blue-600"
@@ -44,27 +51,28 @@
       return {
         sensores: [],
         userInput: "", // For storing user input
-        sensorId: this.$route.params.id,    
+        sensor_id: this.$route.params.id,    
       };
     },
     methods: {
-      async viewSensorCode(codigo) {
-        try {
-          // Fetch and display sensor code logic (replace with actual API endpoint)
-          const response = await api.get(`/sensor/code/${codigo}`);
-          alert(`Código do Sensor: ${response.data.code}`);
-        } catch (error) {
-          console.error("Error fetching sensor code:", error);
-        }
-      },
       sendInput() {
         if (this.userInput.trim() === "") {
           alert("Por favor, escreva algo antes de enviar.");
           return;
         }
-        console.log("Input enviado:", this.userInput);
-        // Handle input (e.g., send to API or other logic)
-        this.userInput = ""; // Clear the input field
+        // Send user input logic (replace with actual API endpoint)
+        console.log("Sending user input:", this.userInput);
+        
+
+        const medicoes = {
+          data: Date.now(),
+          valor: this.userInput,
+          sensor_id: this.sensor_id,
+        };
+        api.post(`/sensor/${medicoes.sensor_id}/medicoes`, medicoes);
+
+        console.log("Medição enviada com sucesso!");
+        console.log("Medição:", medicoes);
       },
     },
     async created() {
@@ -76,7 +84,7 @@
         if (!authStore.isLoggedIn) {
           throw new Error("Usuário não autenticado.");
         }
-        const response = await api.get("/sensor/all");
+        const response = await api.get(`/sensor/${this.sensor_id}`);
         this.sensores = response.data;
       } catch (error) {
         console.error("Error fetching sensores:", error);

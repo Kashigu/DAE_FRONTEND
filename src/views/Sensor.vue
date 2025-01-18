@@ -18,9 +18,9 @@
           <!-- Encomenda Information Clicas no sensor e vês o historico--> 
           <a :href="'/AddMedicoes/' + sensor.id">
           <h2 class="text-2xl font-bold text-black mb-4">Código: {{ sensor.id }}</h2>
-          <p class="text-lg font-medium">Estado: {{ sensor.ativo }}</p>
-          <p class="text-lg font-medium">Morada: {{ sensor.tipo }}</p>
-          <p class="text-lg font-medium">Cliente: {{ sensor.volume }}</p>
+          <p class="text-lg font-medium">Estado: {{ sensor.ativo ? 'Ativo' : 'Inativo' }}</p>
+          <p class="text-lg font-medium">Sensor: {{ sensor.tipo }}</p>
+          <p class="text-lg font-medium">VolumeId: {{ sensor.volumeId }}</p>
            </a>
         </div>
       </div>
@@ -46,7 +46,7 @@
         if (!authStore.isLoggedIn) {
           throw new Error("Usuário não autenticado.");
         }
-       
+        
         console.log(authStore.user.role);
         let endPoint;
         if(authStore.user.role === 'SensorAuth'){
@@ -56,6 +56,7 @@
         }
         const response = await api.get(endPoint);
         this.sensores = response.data;
+        console.log(this.sensores);
       } catch (error) {
         console.error("Error fetching sensor:", error);
       }
