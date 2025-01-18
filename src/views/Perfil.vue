@@ -113,15 +113,15 @@
 <script>
 import { useAuthStore } from "@/stores/auth.js";
 import api from "@/api/api.js";
+import { useRouter } from "vue-router";
 
 export default {
   setup() {
     const authStore = useAuthStore();
-
-    // Redirect if not logged in
+    const router = useRouter(); 
+    
     if (!authStore.user) {
-      alert("Utilizador não autenticado!");
-      this.$router.push("/login");
+      router.push("/login");
     }
 
     return {
