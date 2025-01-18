@@ -72,13 +72,19 @@ const routes = [
     component: () => import('@/views/EditarPerfil.vue'),
     meta: { layout: Layout },
   },
+  {
+    path:'/register',
+    name:'Register',
+    component: () => import('@/views/Register.vue'),
+    meta: { layout: Layout },
+  },
+  {
+    path:'/Encomendar',
+    name:'Encomendar',
+    component: () => import('@/views/Encomendar.vue'),
+    meta: { layout: Layout },
+  },
 
-    {
-      path:'/register',
-      name:'Register',
-      component: () => import('@/views/Register.vue'),
-      meta: { layout: Layout },
-    }
 ];
 
 const router = createRouter({

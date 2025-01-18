@@ -10,7 +10,8 @@
 
       <!-- User Section -->
       <div v-if="authStore.isUserLoggedIn" class="text-white font-bold flex justify-end  px-6 ">
-        <router-link to="/encomendas" class="hover:text-gray-200 mx-2">Encomendas</router-link>
+        <router-link to="/encomendar" class="hover:text-gray-200 mx-2">Encomendar</router-link>
+        <router-link to="/encomendas" class="hover:text-gray-200 mx-2">Minhas Encomendas</router-link>
         <router-link to="/perfil" class="hover:text-gray-200 mx-2">Perfil</router-link>
         <router-link to="/login" class="hover:text-gray-200 mx-2">Logout</router-link>
       </div>
