@@ -161,6 +161,24 @@ const routes = [
     name:'EditarSensorAuth',
     component: () => import('@/views/EditarSensorAuth.vue'),
     meta: { layout: Layout },
+  },
+  {
+    path:'/gestores',
+    name:'Gestores',
+    component: () => import('@/views/Gestores.vue'),
+    meta: { layout: Layout },
+  },
+  {
+    path:'/gestores/criar',
+    name:'CriarGestor',
+    component: () => import('@/views/CriarGestor.vue'),
+    meta: { layout: Layout },
+  },
+  {
+    path:'/gestores/editar/:id',
+    name:'EditarGestor',
+    component: () => import('@/views/EditarGestor.vue'),
+    meta: { layout: Layout },
   }
 
 

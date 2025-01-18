@@ -25,6 +25,7 @@
       <!-- Gestor Section -->
       <div v-if="authStore.isUserLoggedIn && authStore.user?.role === 'Gestor'" class="text-white font-bold flex justify-end px-6">
         <router-link to="/sensoresAuth" class="hover:text-gray-200 mx-2">SensoresContas</router-link>
+        <router-link to="/gestores" class="hover:text-gray-200 mx-2">Gestores</router-link>
         <router-link to="/funcionarios" class="hover:text-gray-200 mx-2">Funcionarios</router-link>
         <router-link to="/clientes" class="hover:text-gray-200 mx-2">Clientes</router-link>
         <router-link to="/produtos/all" class="hover:text-gray-200 mx-2">Produtos</router-link>
