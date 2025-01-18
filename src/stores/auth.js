@@ -1,11 +1,13 @@
 import api from '/src/api/api.js';
 import { defineStore } from 'pinia';
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 
 export const useAuthStore = defineStore('auth', () => {
     const token = ref('');
     const user = ref(null);
     const isLoggedIn = ref(false);
+
+    const isUserLoggedIn = computed(() => isLoggedIn.value);
 
     const checkValue = (value) => {
         /*
@@ -87,5 +89,6 @@ export const useAuthStore = defineStore('auth', () => {
         login,
         logout,
         getToken,
+        isUserLoggedIn,
     };
 });

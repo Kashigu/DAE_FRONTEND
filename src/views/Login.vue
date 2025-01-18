@@ -51,6 +51,7 @@
 
 <script>
 import { useAuthStore } from '../stores/auth';
+import { onMounted } from 'vue';
 import router from "@/router/index.js"; // Import the store
 
 export default {
@@ -59,6 +60,18 @@ export default {
       username: '', // Bound to the username input
       password: '', // Bound to the password input
       errorMessage: '', // Error message for invalid login
+    };
+  },
+  setup() {
+    const authStore = useAuthStore();
+
+    // Call the logout function on component mounted
+    onMounted(() => {
+      authStore.logout();
+    });
+
+    return {
+      authStore,
     };
   },
   methods: {
@@ -77,3 +90,7 @@ export default {
   },
 };
 </script>
+
+<style>
+/* Optional: Add custom styles here */
+</style>
