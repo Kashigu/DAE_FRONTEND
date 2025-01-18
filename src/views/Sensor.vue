@@ -64,14 +64,19 @@ import { useRouter } from "vue-router";
 export default {
   setup() {
     const authStore = useAuthStore();
-    const router = useRouter(); 
-    
-    if (!authStore.user) {
-      router.push("/login");
-    }
+    const router = useRouter();
+
+    // Ensure the token is retrieved first
+    authStore.getToken().then(() => {
+      // Now check if the user is logged in
+      if (!authStore.user) {
+        router.push("/login");
+      }
+    });
 
     return {
       authStore,
+      router,  // Ensure router is returned
     };
   },
   data() {
